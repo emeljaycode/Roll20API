@@ -36,9 +36,7 @@ on("ready",function(){
             token.set({
                 width:tokenwidth,
                 height:tokenheight,
-                top:tokenheight/2,
-                left:tokenwidth/2,
-                layer:"token"
+                layer:"objects"
             });
         }
     });
