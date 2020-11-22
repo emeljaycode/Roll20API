@@ -1,0 +1,43 @@
+on("ready",function(){   
+    on("chat:message",function(msg){
+        if(msg.type=="api" && msg.content.indexOf("!autoSize")==0){
+            var tokenwidth, tokenheight;
+            var args = msg.content.split(" ");
+            var width = Number(args[1]);
+            var height = Number(args[2]);
+            var unittype = args[3];
+            
+            var selected = msg.selected;
+            if(selected===undefined){
+                sendChat("API","Please select a graphic");
+                return;
+            }
+            if(isNaN(width)||isNaN(height)){
+                sendChat("API","Please enter a valid number for width & height");
+                return;
+            }
+            var token = getObj("graphic",selected[0]._id);
+            var page = getObj("page",token.get("pageid"));
+            
+            switch(unittype){
+                case "pixels":
+                    tokenwidth = width;
+                    tokenheight = height;
+                    break;
+                case "units":
+                    tokenwidth = width * 70;
+                    tokenheight = height * 70;
+                    break;
+                default:
+                    sendChat("API", "Please specify units or pixels");
+                    return;
+            }
+            
+            token.set({
+                width:tokenwidth,
+                height:tokenheight,
+                layer: "objects"
+            });
+        }
+    });
+});
